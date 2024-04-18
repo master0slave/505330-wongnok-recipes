@@ -61,4 +61,3 @@ wongnok_recipes/
 http://locallhost:8000/docs
 
 ![alt text](<images/Screenshot 2567-04-18 at 20.05.01.png>)
-**ยังทำ Fornt-End ไม่เสร็จ**
