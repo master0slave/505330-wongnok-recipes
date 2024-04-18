@@ -1,0 +1,49 @@
+{% include 'layout.html' %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Create Your Recipe
+        </div>
+        <div class="card-body">
+            <form method="POST" action="/recipes/add" enctype="multipart/form-data"> <!-- Update the action to your recipe creation endpoint -->
+                <div class="form-group">
+                    <label>ชื่อเมนู*</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>วัตถุดิบ*</label>
+                    <textarea class="form-control" rows="3" name="ingredients" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>ขั้นตอน*</label>
+                    <textarea class="form-control" rows="3" name="instructions" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>เวลาที่ใช้ทำอาหาร*</label><br>
+                    <select class="form-control" name="cook_time" required>
+                        <option value="">Select Cook Time</option>
+                        <option value="5-10 mins">5-10 mins</option>
+                        <option value="11-30 mins">11-30 mins</option>
+                        <option value="31-60 mins">31-60 mins</option>
+                        <option value="60+ mins">60+ mins</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>ระดับความยากงานของสูตร*</label>
+                    <select class="form-control" name="difficulty" required>
+                        <option value="">Select Cook Time</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="image">รูปภาพอาหาร</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Recipe</button>
+            </form>
+        </div>
+    </div>
+</div>
