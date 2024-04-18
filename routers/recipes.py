@@ -135,7 +135,7 @@ async def create_recipe(
         })
 
     # Save the image file
-    file_location = f"../images/{uuid.uuid4()}.{image.filename.split('.')[-1]}"
+    file_location = f"images/{uuid.uuid4()}.{image.filename.split('.')[-1]}"
     os.makedirs(os.path.dirname(file_location), exist_ok=True)
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(image.file, file_object)
@@ -163,12 +163,12 @@ async def create_recipe(
 
 
 @router.get("/edit/{recipe_id}", response_class=HTMLResponse)
-async def edit_recipe_form(request: Request, recipe_id: int, db: Session = Depends(get_db)):
+async def edit_recipe_form(request: Request, recipe_id: str, db: Session = Depends(get_db)):
     user = await get_current_user(request)
     if user is None:
         return RedirectResponse(url="/auth", status_code=status.HTTP_302_FOUND)
 
-    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user.id).first()
+    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user['id']).first()
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
 
@@ -176,38 +176,70 @@ async def edit_recipe_form(request: Request, recipe_id: int, db: Session = Depen
 
 
 @router.post("/edit/{recipe_id}", response_class=HTMLResponse)
-async def update_recipe(request: Request, recipe_id: int, title: str = Form(...),
-                        description: str = Form(...), cook_time: int = Form(...),
-                        difficulty: str = Form(...), db: Session = Depends(get_db)):
+async def update_recipe(request: Request, recipe_id: str, 
+                        title: str = Form(...),
+                        ingredients: str = Form(...),
+                        instructions: str = Form(...),
+                        cook_time: str = Form(...),
+                        difficulty: str = Form(...),
+                        image: UploadFile = File(None),  # Image is optional
+                        db: Session = Depends(get_db)):
     user = await get_current_user(request)
     if user is None:
         return RedirectResponse(url="/auth", status_code=status.HTTP_302_FOUND)
 
-    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user.id).first()
+    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user['id']).first()
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
 
     recipe.title = title
-    recipe.description = description
+    recipe.ingredients = ingredients
+    recipe.instructions = instructions
     recipe.cook_time = cook_time
     recipe.difficulty = difficulty
+
+    # Check if an image was uploaded
+    if image:
+        if image.content_type not in ['image/jpeg', 'image/png']:
+            return templates.TemplateResponse("edit-recipe.html", {
+                "request": request,
+                "user": user,
+                "recipe": recipe,
+                "error": "Invalid image format. Only JPEG or PNG are accepted."
+            })
+
+        # Save the new image and update the image URL in the database
+        file_location = f"images/{uuid.uuid4()}.{image.filename.split('.')[-1]}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+        with open(file_location, "wb+") as file_object:
+            shutil.copyfileobj(image.file, file_object)
+
+        # Update recipe with new image URL
+        recipe.image_url = file_location
 
     db.commit()
 
     return RedirectResponse(url="/recipes", status_code=status.HTTP_302_FOUND)
 
 
-@router.get("/delete/{recipe_id}")
-async def delete_recipe(request: Request, recipe_id: int, db: Session = Depends(get_db)):
+@router.get("/delete/{recipe_id}")  # Delete a recipe by its ID
+async def delete_recipe(request: Request, recipe_id: str, db: Session = Depends(get_db)):
+    # Check if the user is authenticated
     user = await get_current_user(request)
+    # If the user is not authenticated, redirect to the login page
     if user is None:
         return RedirectResponse(url="/auth", status_code=status.HTTP_302_FOUND)
 
-    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user.id).first()
+    # Find the recipe in the database with the given ID and created by the current user
+    recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id, models.Recipe.creator_id == user['id']).first()
+    # If the recipe is not found, redirect to the recipes list page with a 404 status code
     if not recipe:
         return RedirectResponse(url="/recipes", status_code=status.HTTP_404_NOT_FOUND)
 
+    # Delete the recipe from the database
     db.delete(recipe)
+    # Commit the changes to the database
     db.commit()
 
+    # Redirect to the recipes list page
     return RedirectResponse(url="/recipes", status_code=status.HTTP_302_FOUND)
