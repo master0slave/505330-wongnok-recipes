@@ -7,48 +7,28 @@
 
 ขั้นตอนการรัน web application และ การใช้งานเบื้องต้น
 
-first time: ................................
-create new environment
+### Init Prroject
+#### Create new environment
+```
 > cd 505330-wongnok-recipes 
 > conda create --name wk-be python=3.11
 > conda activate wk-be
 > pip install -r reqiurement.txt
-create database - Prerequire:sqlite is installed
+```
+#### Create database - Prerequire:sqlite is installed
+```
 > python database.py
 > python models.py 
-
-Run Project
+```
+### Run Project
 > uvicon main:app --reload
 
-Workspace Directory Detail
+### Workspace Directory Detail
+```
 wongnok_recipes/
-│
-├── backend/             # All backend-related files
-│   ├── app/             # Main application package
-│   │   ├── __init__.py  # Initializes the Python package
-│   │   ├── main.py      # FastAPI application instance and routes
-│   │   ├── models.py    # Database models
-│   │   ├── schemas.py   # Pydantic models for request/response validation
-│   │   ├── crud.py      # CRUD operations (interaction with the database)
-│   │   └── database.py  # Database session management and engine
-│   │
-│   ├── tests/           # Test modules for the backend
-│   │   └── test_api.py  # Test cases for API endpoints
-│   │
-│   └── requirements.txt # Project dependencies
-│
-├── frontend/            # Frontend-related files (Streamlit app)
-│   ├── app.py           # Streamlit application
-│   └── requirements.txt # Frontend dependencies
-│
-├── scripts/             # Utility scripts, e.g., for setting up the database
-│   └── init_db.py       # Script for initializing the database
-│
-└── README.md            # Project overview and setup instructions
-
-
 .
-├── README.md
+|── README.md
+|
 ├── database.py            # Database session management and engine
 ├── images                 # Static folder for image collection 
 ├── main.py                # main app
@@ -69,17 +49,16 @@ wongnok_recipes/
 │           └── popper.js
 ├── templates              # Template for UI
 │   ├── add-recipe.html
-│   ├── add-todo.html
-│   ├── edit-todo.html
+│   ├── edit-recipe.html
 │   ├── home.html
 │   ├── layout.html
 │   ├── login.html
 │   ├── navbar.html
 │   └── register.html
 └── wongnok_recipes.db    # Data Base that use for this app - sqlite
-
-API Document 
-locallhost
+```
+### API Document
 http://locallhost:8000/docs
 
+![alt text](<images/Screenshot 2567-04-18 at 20.05.01.png>)
 **ยังทำ Fornt-End ไม่เสร็จ**
