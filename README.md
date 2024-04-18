@@ -59,7 +59,10 @@ wongnok_recipes/
 ```
 ### Example
 
-![alt text](<Screenshot 2567-04-19 at 00.06.40.png>)
+![alt text](<images/Screenshot 2567-04-19 at 00.17.52.png>)
+![alt text](<images/Screenshot 2567-04-19 at 00.21.22.png>)
+
+![alt text](<images/Screenshot 2567-04-19 at 00.06.40.png>)
 
 ### API Document
 http://locallhost:8000/docs
