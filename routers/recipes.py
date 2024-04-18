@@ -35,26 +35,53 @@ def get_db():
         db.close()
 
 
+# @router.get("/", response_class=HTMLResponse)
+# async def read_recipes(request: Request, db: Session = Depends(get_db)):
+#     user = await get_current_user(request)
+#     if user is None:
+#         # Redirect to login if no user is found
+#         return RedirectResponse(url="/auth", status_code=status.HTTP_302_FOUND)
+
+#     try:
+#         recipes = db.query(models.Recipe).filter(models.Recipe.creator_id == user['id']).all()
+#         if not recipes:
+#             # No recipes found, handle gracefully by informing the user
+#             return templates.TemplateResponse("home.html", {"request": request, "recipes": [], "user": user, "message": "No recipes found. Start by adding some!"})
+#     except Exception as e:
+#         # Log the exception or handle it as needed
+#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database error: {str(e)}")
+
+#     # Normal response with recipes
+#     return templates.TemplateResponse("home.html", {"request": request, "recipes": recipes, "user": user})
+
 @router.get("/", response_class=HTMLResponse)
 async def read_recipes(request: Request, db: Session = Depends(get_db)):
     user = await get_current_user(request)
     if user is None:
-        # Redirect to login if no user is found
         return RedirectResponse(url="/auth", status_code=status.HTTP_302_FOUND)
 
     try:
         recipes = db.query(models.Recipe).filter(models.Recipe.creator_id == user['id']).all()
+        # Update recipe image URLs to include the full path if not already included
+        for recipe in recipes:
+            if recipe.image_url and not recipe.image_url.startswith("/images/"):
+                recipe.image_url = f"/{recipe.image_url}"
+        
         if not recipes:
-            # No recipes found, handle gracefully by informing the user
-            return templates.TemplateResponse("home.html", {"request": request, "recipes": [], "user": user, "message": "No recipes found. Start by adding some!"})
+            return templates.TemplateResponse("home.html", {
+                "request": request, 
+                "recipes": [], 
+                "user": user, 
+                "message": "No recipes found. Start by adding some!"
+            })
     except Exception as e:
-        # Log the exception or handle it as needed
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Database error: {str(e)}")
 
-    # Normal response with recipes
-    return templates.TemplateResponse("home.html", {"request": request, "recipes": recipes, "user": user})
-
-
+    return templates.TemplateResponse("home.html", {
+        "request": request, 
+        "recipes": recipes, 
+        "user": user
+    })
 @router.get("/add", response_class=HTMLResponse)
 async def add_recipe_form(request: Request):
     user = await get_current_user(request)

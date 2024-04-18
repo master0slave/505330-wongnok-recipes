@@ -57,6 +57,10 @@ wongnok_recipes/
 │   └── register.html
 └── wongnok_recipes.db    # Data Base that use for this app - sqlite
 ```
+### Example
+
+![alt text](<Screenshot 2567-04-19 at 00.06.40.png>)
+
 ### API Document
 http://locallhost:8000/docs
 
