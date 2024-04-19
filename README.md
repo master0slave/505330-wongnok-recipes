@@ -21,7 +21,7 @@
 > python models.py 
 ```
 ### Run Project
-> uvicon main:app --reload
+> uvicorn main:app --reload
 
 ### Workspace Directory Detail
 ```
@@ -62,7 +62,7 @@ wongnok_recipes/
 ![alt text](<images/Screenshot 2567-04-19 at 00.17.52.png>)
 ![alt text](<images/Screenshot 2567-04-19 at 00.21.22.png>)
 
-![alt text](<images/Screenshot 2567-04-19 at 00.06.40.png>)
+![alt text](<images/Screenshot 2567-04-19 at 07.54.14.png>)
 
 ### API Document
 http://locallhost:8000/docs

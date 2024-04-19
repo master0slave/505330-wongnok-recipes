@@ -13,8 +13,12 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Image</th> <!-- Added column header for images -->
-                    <th scope="col">Recipe Name</th>
+                    <th scope="col">รูปภาพอาหาร</th> <!-- Added column header for images -->
+                    <th scope="col">ชื่อเมนู</th>
+                    <th scope="col">วัตถุดิบ</th>
+                    <th scope="col">ขั้นตอน</th>
+                    <th scope="col">เวลาที่ใช้ทำอาหาร</th>
+                    <th scope="col">ระดับความยากง่าย</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -31,6 +35,10 @@
                         {% endif %}
                     </td>
                     <td>{{ recipe.title }}</td>
+                    <td>{{ recipe.ingredients }}</td>
+                    <td>{{ recipe.instructions }}</td>
+                    <td>{{ recipe.cook_time }}</td>
+                    <td>{{ recipe.difficulty }}</td>
                     <td>
                         <button onclick="window.location.href='edit/{{recipe.id}}'"
                                 type="button" class="btn btn-info">Edit</button>
