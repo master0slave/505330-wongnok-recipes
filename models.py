@@ -44,7 +44,7 @@ class Recipe(Base):
     id = Column(String, primary_key=True, default=get_uuid)
     title = Column(String, index=True)
     ingredients = Column(String)
-    instructions = Column(Integer)
+    instructions = Column(String)
     cook_time = Column(String)
     difficulty = Column(String)
     image_url = Column(String)
